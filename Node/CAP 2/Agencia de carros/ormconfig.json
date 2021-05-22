@@ -6,10 +6,10 @@
   "password": "perosa2909",
   "database": "rentex",
   "logging": "all",
-  "migrations": ["./src/database/migrations/**.ts"],
+  "migrations": ["./src/shared/infra/typeorm/migrations/**.ts"],
   "entities": ["./src/modules/**/entities/**.ts"],
   "subscribers": ["./src/database/subscriber/**.ts"],
   "cli": {
-    "migrationsDir": "./src/database/migrations"
+    "migrationsDir": "./src/shared/infra/typeorm/migrations"
   }
 }
