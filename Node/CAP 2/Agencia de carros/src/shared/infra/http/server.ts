@@ -3,14 +3,17 @@ import cors from 'cors'
 import express, { Request, Response, NextFunction } from 'express'
 import 'express-async-errors'
 import swaggerUi from 'swagger-ui-express'
-import '../typeorm'
+
 import '../../container'
 
 import swaggerFile from '../../../swagger.json'
 import { AppError } from '../../error/AppError'
+import createConection from '../typeorm'
 import { router } from './routes'
 
 const app = express()
+
+createConection()
 app.use(cors())
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 

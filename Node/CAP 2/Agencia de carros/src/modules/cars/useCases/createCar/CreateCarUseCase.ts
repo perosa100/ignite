@@ -1,12 +1,13 @@
 import { inject, injectable } from 'tsyringe'
 
+import { AppError } from '../../../../shared/error/AppError'
+import { Car } from '../../infra/typeorm/entities/Car'
 import { ICarsRepository } from '../../repositories/ICarsRepository'
 
 interface IRequest {
   name: string
   description: string
   daily_rate: number
-  available: boolean
   license_plate: string
   fine_amount: number
   brand: string
@@ -23,13 +24,29 @@ class CreateCarUseCase {
     name,
     description,
     daily_rate,
-    available,
     license_plate,
     fine_amount,
     brand,
     category_id
-  }: IRequest): Promise<void> {
-    return null
+  }: IRequest): Promise<Car> {
+    const carAlreadyExists = await this.carsRepository.findByLicensePlate(
+      license_plate
+    )
+
+    if (carAlreadyExists) {
+      throw new AppError('Carro já cadastrado')
+    }
+    const car = await this.carsRepository.create({
+      name,
+      description,
+      daily_rate,
+      license_plate,
+      fine_amount,
+      brand,
+      category_id
+    })
+
+    return car
   }
 }
 
