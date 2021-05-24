@@ -5,6 +5,8 @@ import uploadConfig from '../../../../config/upload'
 import { CreateCategoryController } from '../../../../modules/cars/useCases/createCategory/CreateCategoryController'
 import { ImportCategoryController } from '../../../../modules/cars/useCases/importCategory/ImportCategoryController'
 import { ListCategoriesController } from '../../../../modules/cars/useCases/listCategories/ListCategoriesController'
+import { ensureAdmin } from '../middlewares/ensureAdmin'
+import { ensureAuthenticated } from '../middlewares/ensureAuthenticated'
 
 const categoriesRoutes = Router()
 
@@ -14,12 +16,19 @@ const listCategoriesController = new ListCategoriesController()
 
 const uploadCsv = multer(uploadConfig.upload('./tmp/csv'))
 
-categoriesRoutes.post('/', createCategoryController.handle)
+categoriesRoutes.post(
+  '/',
+  ensureAuthenticated,
+  ensureAdmin,
+  createCategoryController.handle
+)
 
 categoriesRoutes.get('/', listCategoriesController.handle)
 
 categoriesRoutes.post(
   '/import',
+  ensureAuthenticated,
+  ensureAdmin,
   uploadCsv.single('file'),
   importCategoryController.handle
 )
