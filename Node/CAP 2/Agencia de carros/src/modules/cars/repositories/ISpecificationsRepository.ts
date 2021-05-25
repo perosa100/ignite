@@ -6,8 +6,8 @@ interface ISpecificationsDTO {
 }
 interface ISpecificationsRepository {
   findByName(name: string): Promise<Specification>
-  // list(): Category[]
-  create({ name, description }: ISpecificationsDTO): Promise<void>
+  findByIds(ids: string[]): Promise<Specification[]>
+  create({ name, description }: ISpecificationsDTO): Promise<Specification>
 }
 
 export { ISpecificationsRepository, ISpecificationsDTO }
