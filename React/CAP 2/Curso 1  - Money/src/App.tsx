@@ -1,23 +1,33 @@
-import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import GlobalStyles from './styles/global'
+import Header from './components/Header'
+import Dashboard from './components/Dashboard'
+import { useState } from 'react'
+import NewTransactionModal from './components/NewTransactionModal'
+import Modal from 'react-modal'
 
-import Routes from './routes';
-import GlobalStyles from './styles/global';
-import Header from './components/Header';
-import { CartProvider } from './hooks/useCart';
+Modal.setAppElement('#root')
 
 const App = (): JSX.Element => {
-  return (
-    <BrowserRouter>
-      <CartProvider>
-        <GlobalStyles />
-        <Header />
-        <Routes />
-        <ToastContainer autoClose={3000} />
-      </CartProvider>
-    </BrowserRouter>
-  );
-};
+  const [inNewTransactionsModalOpen, setInNewTransactionsModalOpen] =
+    useState(false)
 
-export default App;
+  function handleOpenNewTransactionsModal() {
+    setInNewTransactionsModalOpen(true)
+  }
+  function handleCloseNewTransactionsModal() {
+    setInNewTransactionsModalOpen(false)
+  }
+  return (
+    <>
+      <GlobalStyles />
+      <Header onOpenNewTransactionsModal={handleOpenNewTransactionsModal} />
+      <Dashboard />
+      <NewTransactionModal
+        isOpen={inNewTransactionsModalOpen}
+        onRequestClose={handleCloseNewTransactionsModal}
+      />
+    </>
+  )
+}
+
+export default App
