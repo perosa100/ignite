@@ -11,13 +11,18 @@ getConnectionOptions().then((options) => {
     ...options
   })
 }) */
+
+/* rentex_test */
 createConnection()
 export default async (host = 'localhost'): Promise<Connection> => {
   const defaulfOptions = await getConnectionOptions()
-
   return createConnection(
     Object.assign(defaulfOptions, {
-      host
+      host: process.env.NODE_ENV === 'test' ? 'localhost' : host,
+      database:
+        process.env.NODE_ENV === 'test'
+          ? 'rentex_test'
+          : defaulfOptions.database
     })
   )
 }
