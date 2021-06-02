@@ -1,17 +1,9 @@
-import { useEffect, useState } from 'react'
-import { api } from '../../services/api'
 import { Container } from './styles'
-
-type TransactionDataProps = {
-  id: number
-  title: string
-  type: 'deposit' | 'withdraw'
-  category: string
-  amount: number
-  createdAt: Date
-}
+import { useTransactions } from '../../hooks/useTransactions'
 
 function TransationsTable() {
+  const { transactions } = useTransactions()
+
   return (
     <Container>
       <table>
