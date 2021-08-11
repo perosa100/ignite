@@ -65,14 +65,14 @@ export const DashboardTemplate = () => {
         <Sidebar />
 
         <SimpleGrid flex="1" gap="4" minChildWidth="320px" align="flex-start">
-          <Box p="8" bg="gray.400" borderRadius={8} pb="4">
+          <Box p={['4', '8']} bg="gray.400" borderRadius={8} pb="4">
             <Text fontSize="lg" mb="4">
               Inscritos na semana
             </Text>
             <Chart type="area" height={160} options={options} series={series} />
           </Box>
 
-          <Box p="8" bg="gray.400" borderRadius={8} pb="4">
+          <Box p={['4', '8']} bg="gray.400" borderRadius={8} pb="4">
             <Text fontSize="lg" mb="4">
               Taxa de Abertura
             </Text>

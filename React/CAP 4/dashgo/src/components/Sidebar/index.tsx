@@ -1,56 +1,45 @@
-import { Box, Text, Stack, Link, Icon } from '@chakra-ui/react'
-import React from 'react'
 import {
-  RiContactsLine,
-  RiDashboardLine,
-  RiGitMergeLine,
-  RiInputMethodLine
-} from 'react-icons/ri'
+  Box,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  useBreakpointValue
+} from '@chakra-ui/react'
+import { useSideBarDrawer } from 'contexts/SideBarDrawerContext'
 
-export const Sidebar = () => (
-  <Box as="aside" width="64" mr="8">
-    <Stack spacing="12" align="flex-Start">
-      <Box>
-        <Text fontWeight="bold" color="gray.400" fontSize="small">
-          GERAL
-        </Text>
-        <Stack spacing="4" mt="8" align="stretch">
-          <Link display="flex" alignItems="center" color="purple.400">
-            <Icon as={RiDashboardLine} fontSize="20" />
-            <Text ml="4" fontWeight="medium">
-              Dasboard
-            </Text>
-          </Link>
+import React from 'react'
+import SideBarNav from './SideBarNav'
 
-          <Link display="flex" alignItems="center" color="purple.400">
-            <Icon as={RiContactsLine} fontSize="20" />
-            <Text ml="4" fontWeight="medium">
-              Usuarios
-            </Text>
-          </Link>
-        </Stack>
-      </Box>
+export const Sidebar = () => {
+  const { onClose, isOpen } = useSideBarDrawer()
 
-      <Box>
-        <Text fontWeight="bold" color="gray.400" fontSize="small">
-          Automação
-        </Text>
-        <Stack spacing="4" mt="8" align="stretch">
-          <Link display="flex" alignItems="center" color="purple.400">
-            <Icon as={RiInputMethodLine} fontSize="20" />
-            <Text ml="4" fontWeight="medium">
-              Formularios
-            </Text>
-          </Link>
+  const isFloatBarFloat = useBreakpointValue({
+    base: true,
+    lg: false
+  })
 
-          <Link display="flex" alignItems="center" color="purple.400">
-            <Icon as={RiGitMergeLine} fontSize="20" />
-            <Text ml="4" fontWeight="medium">
-              Automação
-            </Text>
-          </Link>
-        </Stack>
-      </Box>
-    </Stack>
-  </Box>
-)
+  if (isFloatBarFloat) {
+    return (
+      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+        <DrawerOverlay>
+          <DrawerContent bg="gray.800" padding="2">
+            <DrawerCloseButton />
+            <DrawerHeader>Navegação</DrawerHeader>
+            <DrawerBody>
+              <SideBarNav />
+            </DrawerBody>
+          </DrawerContent>
+        </DrawerOverlay>
+      </Drawer>
+    )
+  }
+
+  return (
+    <Box as="aside" width="36" mr="8">
+      <SideBarNav />
+    </Box>
+  )
+}

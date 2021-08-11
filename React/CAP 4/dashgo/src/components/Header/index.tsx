@@ -1,91 +1,49 @@
-import {
-  Flex,
-  Image,
-  Text,
-  Input,
-  Icon,
-  HStack,
-  Box,
-  Avatar
-} from '@chakra-ui/react'
-import { RiSearchLine, RiNotificationLine, RiUserAddLine } from 'react-icons/ri'
-{
-  /*     <Image src="img/logo.jpg" width="20" height="20" /> */
-}
-export const Header = () => (
-  <Flex
-    as="header"
-    w="100%"
-    maxW={1480}
-    h="20"
-    mx="auto"
-    mt="4"
-    px="6"
-    align="center"
-  >
-    <Text
-      fontSize="3xl"
-      fontWeight="bold"
-      letterSpacing="tight"
-      w="64"
-      color="green.500"
-    >
-      UFGD
-    </Text>
+import { Flex, Icon, IconButton, useBreakpointValue } from '@chakra-ui/react'
+import { useSideBarDrawer } from 'contexts/SideBarDrawerContext'
+import React from 'react'
+import { RiMenuLine } from 'react-icons/ri'
+import Logo from './Logo'
+import NotificationsNav from './NotificationsNav'
+import Profile from './Profile'
+import SearchBox from './SearchBox'
+
+export const Header = () => {
+  const { onOpen } = useSideBarDrawer()
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true
+  })
+  return (
     <Flex
-      as="label"
-      flex="1"
-      py="4"
-      px="8"
-      ml="6"
-      maxW={400}
-      alignSelf="center"
-      color="gray.200"
-      position="relative"
-      bg="gray.600"
-      borderRadius="full"
+      as="header"
+      w="100%"
+      maxW={1480}
+      h={['10', '20']}
+      mx="auto"
+      mt="4"
+      px="6"
+      align="center"
     >
-      <Input
-        color="gray.50"
-        variant="unstyled"
-        px="4"
-        mr="4"
-        placeholder="Buscar na plataforma"
-        _placeholder={{
-          color: 'gray.50'
-        }}
-      />
-      <Icon as={RiSearchLine} fontSize="20" />
-    </Flex>
+      {!isWideVersion && (
+        <IconButton
+          aria-label="Open navigate"
+          as={RiMenuLine}
+          fontSize="24"
+          onClick={onOpen}
+          mr="2"
+          color="green.500"
+          variant="unstyled"
+          cursor="pointer"
+        ></IconButton>
+      )}
+      <Logo />
 
-    <Flex align="center" ml="auto">
-      <HStack
-        spacing="4"
-        mx="8"
-        pr="8"
-        py="1"
-        color="gray.500"
-        borderRightWidth={1}
-        borderColor="gray.900"
-      >
-        <Icon as={RiNotificationLine} fontSize="20" />
-        <Icon as={RiUserAddLine} fontSize="20" />
-      </HStack>
+      <SearchBox />
 
-      <Flex align="center">
-        <Box marginRight="4" textAlign="right">
-          <Text color="pink.900">Patrick Perosa</Text>
-          <Text color="gray.500" fontSize="small">
-            patrickperosapp@gmail.com
-          </Text>
-        </Box>
-
-        <Avatar
-          size="md"
-          name="Patrick Perosa"
-          src="https:github.com/perosa100.png"
-        />
+      <Flex align="center" ml="auto">
+        <NotificationsNav />
+        <Profile showProfileData={isWideVersion} />
       </Flex>
     </Flex>
-  </Flex>
-)
+  )
+}
