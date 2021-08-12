@@ -1,12 +1,13 @@
-import { forwardRef, ForwardRefRenderFunction } from 'react'
-import { FieldError } from 'react-hook-form'
 import {
   Input as FormInput,
   FormLabel,
   FormControl,
   InputProps as ChakraInputProps,
-  FormErrorMessage
+  FormErrorMessage,
+  forwardRef
 } from '@chakra-ui/react'
+import { ForwardRefRenderFunction } from 'react'
+import { FieldError } from 'react-hook-form'
 
 interface InputProps extends ChakraInputProps {
   name: string

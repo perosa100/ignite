@@ -1,14 +1,10 @@
 import { Input } from '@chakra-ui/input'
 import { Flex, Icon } from '@chakra-ui/react'
-import React from 'react'
+import { useState } from 'react'
 import { RiSearchLine } from 'react-icons/ri'
 
 export default function SearchBox() {
-  const newDate = new Date()
-  console.log(
-    '🚀 ~ file: SearchBox.tsx ~ line 8 ~ SearchBox ~ newDate',
-    newDate
-  )
+  const [searchBox, setSearchBox] = useState('')
 
   return (
     <Flex

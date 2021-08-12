@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Box,
   Button,
@@ -15,13 +14,23 @@ import {
   Tr,
   useBreakpointValue
 } from '@chakra-ui/react'
-import { Sidebar } from 'components/Sidebar'
 import { Header } from 'components/Header'
-import { RiAddLine, RiEditLine } from 'react-icons/ri'
 import Pagination from 'components/Pagination'
+import { Sidebar } from 'components/Sidebar'
+import { QueryUsersAll } from 'graphql/generated/QueryUsersAll'
+import { QUERY_USERS_ALL } from 'graphql/queries/allUsers'
+import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
+import React from 'react'
+import { RiAddLine, RiEditLine } from 'react-icons/ri'
+import { initializeApollo } from 'utils/apollo'
+import protectedRoutes from 'utils/protected-routes'
 
-export default function UserList() {
+type UserListProps = {
+  data: QueryUsersAll
+}
+
+export default function UserList({ data }: UserListProps) {
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true
@@ -62,109 +71,68 @@ export default function UserList() {
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
-                <Td px={['4', '4', '6']}>
-                  <Checkbox colorScheme="pink" />
-                </Td>
+              {data.users.map((user) => (
+                <>
+                  <Tr>
+                    <Td px={['4', '4', '6']}>
+                      <Checkbox colorScheme="pink" />
+                    </Td>
 
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold"> patrick Perosa </Text>
-                    <Text fontSize="sm" color="gray.300">
-                      patrickpoerospp@gmaio.c.om
-                    </Text>
-                  </Box>
-                </Td>
+                    <Td>
+                      <Box>
+                        <Text fontWeight="bold"> {user.username} </Text>
+                        <Text fontSize="sm" color="gray.300">
+                          {user.email}
+                        </Text>
+                      </Box>
+                    </Td>
 
-                <Td>
-                  <Box>
-                    {isWideVersion && <Text> 14 de abril de 2021 </Text>}
-                  </Box>
-                </Td>
-
-                <Td>
-                  <Button
-                    as="a"
-                    size="sm"
-                    fontSize="sm"
-                    colorScheme="orange"
-                    leftIcon={<Icon as={RiEditLine} />}
-                  >
-                    {isWideVersion && 'Editar'}
-                  </Button>
-                </Td>
-              </Tr>
-              <Tr>
-                <Td px={['4', '4', '6']}>
-                  <Checkbox colorScheme="pink" />
-                </Td>
-
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold"> patrick Perosa </Text>
-                    <Text fontSize="sm" color="gray.300">
-                      patrickpoerospp@gmaio.c.om
-                    </Text>
-                  </Box>
-                </Td>
-
-                <Td>
-                  <Box>
-                    {isWideVersion && <Text> 14 de abril de 2021 </Text>}
-                  </Box>
-                </Td>
-
-                <Td>
-                  <Button
-                    as="a"
-                    size="sm"
-                    fontSize="sm"
-                    colorScheme="orange"
-                    leftIcon={<Icon as={RiEditLine} />}
-                  >
-                    {isWideVersion && 'Editar'}
-                  </Button>
-                </Td>
-              </Tr>
-
-              <Tr>
-                <Td px={['4', '4', '6']}>
-                  <Checkbox colorScheme="pink" />
-                </Td>
-
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold"> patrick Perosa </Text>
-                    <Text fontSize="sm" color="gray.300">
-                      patrickpoerospp@gmaio.c.om
-                    </Text>
-                  </Box>
-                </Td>
-
-                <Td>
-                  <Box>
-                    {isWideVersion && <Text> 14 de abril de 2021 </Text>}
-                  </Box>
-                </Td>
-
-                <Td>
-                  <Button
-                    as="a"
-                    size="sm"
-                    fontSize="sm"
-                    cursor="pointer"
-                    colorScheme="orange"
-                    leftIcon={<Icon as={RiEditLine} />}
-                  >
-                    {isWideVersion && 'Editar'}
-                  </Button>
-                </Td>
-              </Tr>
+                    <Td>
+                      <Box>
+                        {isWideVersion && <Text> {user.created_at} </Text>}
+                      </Box>
+                    </Td>
+                    <Td>
+                      <Button
+                        as="a"
+                        size="sm"
+                        fontSize="sm"
+                        colorScheme="orange"
+                        leftIcon={<Icon as={RiEditLine} />}
+                      >
+                        {isWideVersion && 'Editar'}
+                      </Button>
+                    </Td>
+                  </Tr>
+                </>
+              ))}
             </Tbody>
           </Table>
-          <Pagination />
+          <Pagination
+            totalCountOfRegister={200}
+            currentPage={5}
+            onPageChange={() => {}}
+          />
         </Box>
       </Flex>
     </Box>
   )
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await protectedRoutes(context)
+  const apolloClient = initializeApollo(null, session)
+  const { data } = await apolloClient.query<QueryUsersAll>({
+    query: QUERY_USERS_ALL
+  })
+  console.log(
+    '🚀 ~ file: index.tsx ~ line 187 ~ getServerSideProps ~ data',
+    data
+  )
+  return {
+    props: {
+      session,
+      data
+    }
+  }
 }
